@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/msft-marketplace/static/css/main.8c8b27cf.chunk.css",
+    "main.js": "/msft-marketplace/static/js/main.4f69127a.chunk.js",
+    "main.js.map": "/msft-marketplace/static/js/main.4f69127a.chunk.js.map",
+    "runtime-main.js": "/msft-marketplace/static/js/runtime-main.bfe2acb0.js",
+    "runtime-main.js.map": "/msft-marketplace/static/js/runtime-main.bfe2acb0.js.map",
+    "static/js/2.f073cf7a.chunk.js": "/msft-marketplace/static/js/2.f073cf7a.chunk.js",
+    "static/js/2.f073cf7a.chunk.js.map": "/msft-marketplace/static/js/2.f073cf7a.chunk.js.map",
+    "static/js/3.6a33ac54.chunk.js": "/msft-marketplace/static/js/3.6a33ac54.chunk.js",
+    "static/js/3.6a33ac54.chunk.js.map": "/msft-marketplace/static/js/3.6a33ac54.chunk.js.map",
+    "index.html": "/msft-marketplace/index.html",
+    "static/css/main.8c8b27cf.chunk.css.map": "/msft-marketplace/static/css/main.8c8b27cf.chunk.css.map",
+    "static/js/2.f073cf7a.chunk.js.LICENSE.txt": "/msft-marketplace/static/js/2.f073cf7a.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/msft-marketplace/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.bfe2acb0.js",
+    "static/js/2.f073cf7a.chunk.js",
+    "static/css/main.8c8b27cf.chunk.css",
+    "static/js/main.4f69127a.chunk.js"
+  ]
+}
