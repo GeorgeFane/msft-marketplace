@@ -5,7 +5,6 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { TextField, MenuItem } from '@mui/material';
 
-import * as c from './contract/contract.mjs';
 import BasicSelect from './BasicSelect.js';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -27,6 +26,7 @@ export default class App extends React.Component {
     }
 
     async componentDidMount() {
+        const { c } = this.props;
         const admin = await c.contract.methods.admin().call();
         const tokenTypes = await c.contract.methods.getTokenTypes().call();
         const tokenNames = await c.contract.methods.getTokenNames().call();

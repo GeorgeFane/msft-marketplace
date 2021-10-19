@@ -9,8 +9,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { GitHub } from '@mui/icons-material';
 
 import logo from './logo.png';
+import BasicTabs from './BasicTabs';
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({ pages, page, setPage }) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar>
@@ -20,9 +21,17 @@ export default function ButtonAppBar() {
                     >
                         <img src={logo} alt={'Microsoft logo'} height='22' />
                     </Box>
+
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         NFT Marketplace
                     </Typography>
+
+                    <BasicTabs
+                        pages={pages}
+                        page={page}
+                        setPage={setPage}
+                    />
+
                     <IconButton
                         color='inherit'
                         href='https://github.com/GeorgeFane/msft-marketplace'
