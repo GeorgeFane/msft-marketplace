@@ -9,6 +9,12 @@ import Customise from './pages/Customise';
 
 const pages = 'Marketplace Backpack Customise Login'.split(' ');
 
+const item = {
+    image: 'https://image.shutterstock.com/image-illustration/metal-shield-isolated-on-white-260nw-324051260.jpg',
+    name: 'Shield',
+    description: 'standard fungible shield',
+}
+
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -40,7 +46,9 @@ export default class App extends React.Component {
             Login: <Login
                 accounts={accounts}
             />,
-            Customise: <Customise />,
+            Customise: <Customise
+                item={item}
+            />,
             // Backpack: <BasicGrid
             //     accounts={accounts}
             // />,
