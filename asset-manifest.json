@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/msft-marketplace/static/js/main.51a29479.chunk.js",
-    "main.js.map": "/msft-marketplace/static/js/main.51a29479.chunk.js.map",
+    "main.js": "/msft-marketplace/static/js/main.4012db43.chunk.js",
+    "main.js.map": "/msft-marketplace/static/js/main.4012db43.chunk.js.map",
     "runtime-main.js": "/msft-marketplace/static/js/runtime-main.616c01b7.js",
     "runtime-main.js.map": "/msft-marketplace/static/js/runtime-main.616c01b7.js.map",
-    "static/js/2.21ffb376.chunk.js": "/msft-marketplace/static/js/2.21ffb376.chunk.js",
-    "static/js/2.21ffb376.chunk.js.map": "/msft-marketplace/static/js/2.21ffb376.chunk.js.map",
+    "static/js/2.d92c3b77.chunk.js": "/msft-marketplace/static/js/2.d92c3b77.chunk.js",
+    "static/js/2.d92c3b77.chunk.js.map": "/msft-marketplace/static/js/2.d92c3b77.chunk.js.map",
     "index.html": "/msft-marketplace/index.html",
-    "static/js/2.21ffb376.chunk.js.LICENSE.txt": "/msft-marketplace/static/js/2.21ffb376.chunk.js.LICENSE.txt"
+    "static/js/2.d92c3b77.chunk.js.LICENSE.txt": "/msft-marketplace/static/js/2.d92c3b77.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.616c01b7.js",
-    "static/js/2.21ffb376.chunk.js",
-    "static/js/main.51a29479.chunk.js"
+    "static/js/2.d92c3b77.chunk.js",
+    "static/js/main.4012db43.chunk.js"
   ]
 }
