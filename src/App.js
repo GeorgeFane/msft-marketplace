@@ -6,14 +6,38 @@ import Header from './header/Header';
 import BasicGrid from './pages/BasicGrid';
 import Login from './pages/Login';
 import Customise from './pages/Customise';
+import Backpack from './pages/Backpack';
 
-const pages = 'Marketplace Backpack Customise Login'.split(' ');
+const pages = 'Login Marketplace Backpack Customise'.split(' ');
 
-const item = {
+const shield = {
     image: 'https://image.shutterstock.com/image-illustration/metal-shield-isolated-on-white-260nw-324051260.jpg',
     name: 'Shield',
     description: 'standard fungible shield',
-}
+    balance: 2,
+};
+
+const backpack = [
+    shield,
+    {
+        image: 'https://www.scottsdalemint.com/wp-content/uploads/2021/05/2024-Samoa-Year-of-the-Dragon-1-oz-Gold-Coin-02-100x100.jpg',
+        name: 'Gold Coin',
+        description: 'standard fungible coin, default currency',
+        balance: 505,
+    },
+    {
+        image: 'https://soappotions.com/wp-content/uploads/2017/10/round.jpg',
+        name: 'Potion',
+        description: 'standard fungible potion',
+        balance: 1,
+    },
+    {
+        image: 'https://media.istockphoto.com/photos/wooden-medieval-shield-viking-shield-painted-red-and-white-picture-id1180956047?s=612x612',
+        name: 'Customised Shield',
+        description: 'wooden, red and white',
+        balance: 1,
+    },
+]
 
 export default class App extends React.Component {
     constructor(props) {
@@ -47,7 +71,10 @@ export default class App extends React.Component {
                 accounts={accounts}
             />,
             Customise: <Customise
-                item={item}
+                item={shield}
+            />,
+            Backpack: <Backpack
+                backpack={backpack}
             />,
             // Backpack: <BasicGrid
             //     accounts={accounts}

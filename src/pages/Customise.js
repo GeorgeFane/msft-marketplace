@@ -11,8 +11,6 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { CardActions, Button, TextField } from '@mui/material';
 
-import shield from './shield.jpg';
-
 export default function MediaControlCard({ item }) {
     const theme = useTheme();
 
