@@ -6,15 +6,17 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 contract NftMarketplace is ERC1155("NftMarketplace") {
     address public admin;
+    uint256 public tokenId;
     
     constructor() {
         admin = msg.sender;
+        tokenId = 0;
     }
     
     string[] public tokenNames;
     string[] public tokenTypes;
     uint256[] public tokenIds;
-    // Mapping from token id to balances
+    // @Dev Mapping from token id to balances
     mapping (uint256 => mapping(address => uint256)) public balances;
    
     function createTokenType(string memory tokenName) public {
@@ -45,7 +47,7 @@ contract NftMarketplace is ERC1155("NftMarketplace") {
     );
     
     function mint(
-        uint256 id, // token id
+        //uint256 id, // token id
         uint256 amount, // could be 1 for NFT, or could be multiple for fungible tokens or fractional NFTS
         string memory data, // long description
         
@@ -54,15 +56,16 @@ contract NftMarketplace is ERC1155("NftMarketplace") {
         uint256 royaltyPercentage,
         string memory imageLink
     ) public {
-        require(tokenType < tokenTypes.length);
+       // require(tokenType < tokenTypes.length); //what is this for
         tokenNames.push(tokenName);
-        tokenIds.push(id);
-        
+        tokenIds.push(tokenId);
         //update balances
-        balances[id][msg.sender] += amount;
+        balances[tokenId][msg.sender] += amount;
         
-        _mint(msg.sender, id, amount, bytes(data));
-        emit mintEvent(msg.sender, id, amount, data, tokenName, royaltyPercentage, tokenType, imageLink);
+        _mint(msg.sender, tokenId, amount, bytes(data));
+        emit mintEvent(msg.sender, tokenId, amount, data, tokenName, royaltyPercentage, tokenType, imageLink);
+        // tokenId starts at 0, ensures every new token has a unique Id
+        tokenId += 1;
     }
     
     function transfer(
@@ -117,8 +120,3 @@ contract NftMarketplace is ERC1155("NftMarketplace") {
         }
         
         return (positiveTokens, positiveBalances);
-        
-    }
-    
-    
-}
