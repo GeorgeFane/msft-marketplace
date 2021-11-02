@@ -13,7 +13,10 @@ contract NftMarketplace is ERC1155("NftMarketplace") {
     
     string[] public tokenNames;
     string[] public tokenTypes;
-    
+    uint256[] public tokenIds;
+    // Mapping from token id to balances
+    mapping (uint256 => mapping(address => uint256)) public balances;
+   
     function createTokenType(string memory tokenName) public {
         require(msg.sender == admin, "Only Admin can create token types");
         tokenTypes.push(tokenName);
@@ -53,8 +56,69 @@ contract NftMarketplace is ERC1155("NftMarketplace") {
     ) public {
         require(tokenType < tokenTypes.length);
         tokenNames.push(tokenName);
+        tokenIds.push(id);
+        
+        //update balances
+        balances[id][msg.sender] += amount;
         
         _mint(msg.sender, id, amount, bytes(data));
         emit mintEvent(msg.sender, id, amount, data, tokenName, royaltyPercentage, tokenType, imageLink);
     }
+    
+    function transfer(
+        address from, //sender 
+        address to,   //recievr
+        uint256 [] memory ids, //token ids ERC20 or NFT
+        uint256 [] memory amounts, //amount of each
+        string memory data //description for transfer ask george about this
+        
+      ) public {
+            require(from == msg.sender); //must use own adress to send
+            safeBatchTransferFrom(msg.sender, to, ids, amounts, bytes(data));
+            
+            //Update balances
+            for (uint256 i = 0; i < ids.length; ++i) {
+            uint256 id = ids[i];
+            uint256 amount = amounts[i];
+
+            uint256 fromBalance = balances[id][from];
+            require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
+            unchecked {
+                   balances[id][from] = fromBalance - amount;
+            }
+             balances[id][to] += amount;
+        }
+
+    }
+    
+     //count how many tokens with a positive balance an account has
+    function _getpositiveCount(address account) internal view returns (uint256) {
+        uint256 count = 0;
+        for(uint i = 0; i<tokenIds.length; i++){
+            if(balances[tokenIds[i]][account] > 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    //list token ids with positive balnces and their balance for an account
+    function getpositiveIds(address account) public view returns (uint256[] memory, uint256[] memory) {
+        uint256 n = _getpositiveCount(account);
+        uint256[] memory positiveTokens = new uint256 [](n);
+        uint256 [] memory positiveBalances = new uint256 [](n);
+        for(uint i = 0; i<tokenIds.length; i++){
+            if(balances[tokenIds[i]][account] > 0) {
+                
+            positiveTokens[i] = tokenIds[i];
+            positiveBalances[i] = balances[positiveTokens[i]][account];
+            
+            }
+        }
+        
+        return (positiveTokens, positiveBalances);
+        
+    }
+    
+    
 }
