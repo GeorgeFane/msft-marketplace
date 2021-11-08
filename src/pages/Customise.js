@@ -11,56 +11,95 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { CardActions, Button, TextField } from '@mui/material';
 
-export default function MediaControlCard({ item }) {
-    const theme = useTheme();
+export default class MediaControlCard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            id: 0,
+            token: null,
+            balance: 0,
+        };
+    }
 
-    return (
-        <Card sx={{ display: 'flex' }}>
-            <CardMedia
-                component="img"
-                sx={{ width: '33%' }}
-                src={item.image}
-                alt="Live from space album cover"
-            />
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <CardContent sx={{ flex: '1 0 auto' }}>
-                    <Typography component="div" variant="h5">
-                        {item.name}
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary" component="div">
-                        {item.description}
-                    </Typography>
-                    <Typography variant="subtitle1" component="div">
-                        When 'Submit' is pressed, you lose the original item and the new customised item is minted
-                    </Typography>
-                </CardContent>
+    async componentDidMount() {
+        const { getToken, getBalance, account } = this.props;
+        const { id } = this.state;
+        const token = await getToken(id);
+        console.log(token);
 
-                <CardContent sx={{ flex: '1 0 auto' }}>
-                    <TextField
-                        label='Name'
-                    />
-                    <br /><br />
+        const balance = await getBalance(account, id);
+        this.setState({ token, balance });
+    }
 
-                    <TextField
-                        label='Description'
-                        multiline
-                        rows={4}
-                    />
-                    <br /><br />
-                    
-                    <TextField
-                        label='Image URL'
-                    />
-                    <br /><br />
-                    
-                    <Button
-                        variant='contained'
-                        type='submit'
-                    >
-                        Submit
-                    </Button>
-                </CardContent>
-            </Box>
-        </Card>
-    );
+    render() {
+        const { item } = this.props;
+        const { id, token, balance } = this.state;
+
+        if (token === null) {
+            return <div />;
+        }
+
+        return (
+            <Card sx={{ display: 'flex' }}>
+                <CardMedia
+                    component="img"
+                    sx={{ width: '33%' }}
+                    src={token.image}
+                    alt="Live from space album cover"
+                />
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <CardContent sx={{ flex: '1 0 auto' }}>
+                        <TextField
+                            label='Token ID'
+                            type='number'
+                            value={id}
+                            onChange={event => {
+                                const id = event.target.value;
+                                this.setState({ id }, this.componentDidMount);
+                            }}
+                        />
+
+                        <Typography component="div" variant="h5">
+                            {token.name}
+                        </Typography>
+                        <Typography variant="subtitle1" color="text.secondary" component="div">
+                            {token.data}
+                        </Typography>
+                        <Typography variant="subtitle1" color="text.secondary" component="div">
+                            You have {balance}
+                        </Typography>
+                        <Typography variant="subtitle1" component="div">
+                            When 'Submit' is pressed, you lose the original item and the new customised item is minted
+                        </Typography>
+                    </CardContent>
+
+                    <CardContent sx={{ flex: '1 0 auto' }}>
+                        <TextField
+                            label='Name'
+                        />
+                        <br /><br />
+
+                        <TextField
+                            label='Description'
+                            multiline
+                            rows={4}
+                        />
+                        <br /><br />
+                        
+                        <TextField
+                            label='Image URL'
+                        />
+                        <br /><br />
+                        
+                        <Button
+                            variant='contained'
+                            type='submit'
+                        >
+                            Submit
+                        </Button>
+                    </CardContent>
+                </Box>
+            </Card>
+        );
+    }
 }

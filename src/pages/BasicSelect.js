@@ -9,7 +9,7 @@ export default function BasicSelect(props) {
     const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
-        setAge(event.target.value);
+        props.setAccount(event.target.value);
     };
 
     return (
@@ -24,6 +24,7 @@ export default function BasicSelect(props) {
                     // value={age}
                     label={props.label}
                     onChange={handleChange}
+                    value={props.account}
                 >
                     {props.items.map(item => (
                         <MenuItem

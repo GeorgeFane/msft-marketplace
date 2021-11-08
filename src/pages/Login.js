@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function BasicGrid({ accounts }) {
+export default function BasicGrid({ accounts, account, setAccount }) {
   return (
     <Grid
         container
@@ -29,6 +29,8 @@ export default function BasicGrid({ accounts }) {
                 <BasicSelect
                     label='Select Account'
                     items={accounts}
+                    setAccount={setAccount}
+                    account={account}
                 />
 
                 <br />

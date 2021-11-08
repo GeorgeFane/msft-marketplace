@@ -4,14 +4,15 @@ pragma solidity ^0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/ERC1155.sol";
 
-contract NftMarketplace is ERC1155("NftMarketplace") {
+contract Msft is ERC1155("NftMarketplace") {
+    // state
     address public admin;
     
     constructor() {
         admin = msg.sender;
     }
     
-    string[] public tokenNames;
+    // token types
     string[] public tokenTypes;
     
     function createTokenType(string memory tokenName) public {
@@ -23,38 +24,28 @@ contract NftMarketplace is ERC1155("NftMarketplace") {
         return tokenTypes;
     }
     
-    function getTokenNames() public view returns (string[] memory) {
-        return tokenNames;
+    // mint
+    struct token {
+        string name;
+        string data;
+        string image;
+        
+        uint256 amount;
+        uint256 tokenType;
     }
     
-    // id means tokenId
-    // data is nft description
-    event mintEvent(
-        address to,
-        uint256 indexed id,
-        uint256 amount,
-        string data,
-        
-        string indexed tokenName,
-        uint256 royaltyPercentage,
-        uint256 tokenType,
-        string imageLink
-    );
+    token[] public tokens;
     
     function mint(
-        uint256 id, // token id
         uint256 amount, // could be 1 for NFT, or could be multiple for fungible tokens or fractional NFTS
         string memory data, // long description
         
-        string memory tokenName,
+        string memory name,
         uint256 tokenType,
-        uint256 royaltyPercentage,
-        string memory imageLink
+        string memory image
     ) public {
-        require(tokenType < tokenTypes.length);
-        tokenNames.push(tokenName);
-        
-        _mint(msg.sender, id, amount, bytes(data));
-        emit mintEvent(msg.sender, id, amount, data, tokenName, royaltyPercentage, tokenType, imageLink);
+        require(tokenType < tokenTypes.length); // makes sure that tokenType exists
+        _mint(msg.sender, tokens.length, amount, bytes(data));
+        tokens.push(token(name, data, image, amount, tokenType));
     }
 }

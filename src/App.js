@@ -46,35 +46,41 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            admin: null,
-            tokenNames: [],
+            admin: '',
             tokenTypes: [],
             accounts: [],
             page: 'Login',
+            account: '',
         }
     }
 
     async componentDidMount() {
         const admin = await c.contract.methods.admin().call();
         const tokenTypes = await c.contract.methods.getTokenTypes().call();
-        const tokenNames = await c.contract.methods.getTokenNames().call();
 
         const accounts = await c.web3.eth.getAccounts();
 
-        this.setState({ admin, tokenNames, tokenTypes, accounts });
+        console.log(this.state.account);
+
+        this.setState({ admin, tokenTypes, accounts });
     }
 
     setPage = page => this.setState({ page });
+    setAccount = account => this.setState({ account });
 
     render() {
-        const { page, accounts } = this.state;
+        const { page, accounts, account } = this.state;
 
         const getPage = {
             Login: <Login
                 accounts={accounts}
+                account={account}
+                setAccount={this.setAccount}
             />,
             Customise: <Customise
-                item={shield}
+                getToken={c.getToken}
+                getBalance={c.getBalance}
+                account={account}
             />,
             Listing: <Listing
                 item={nft}
