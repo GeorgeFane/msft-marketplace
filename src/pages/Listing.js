@@ -30,34 +30,26 @@ export default function MediaControlCard({ item }) {
                     <Typography variant="subtitle1" color="text.secondary" component="div">
                         {item.description}
                     </Typography>
+                    <Typography variant="subtitle1" color="text.secondary" component="div">
+                        Seller: {item.owner}
+                    </Typography>
                     <Typography variant="subtitle1" component="div">
-                        When 'Submit' is pressed, you lose the original item and the new customised item is minted
+                        When 'Buy' is pressed, the item is exchanged with the 'Price': # of gold coins
                     </Typography>
                 </CardContent>
 
                 <CardContent sx={{ flex: '1 0 auto' }}>
                     <TextField
-                        label='Name'
+                        label='Price'
+                        type='number'
                     />
-                    <br /><br />
-
-                    <TextField
-                        label='Description'
-                        multiline
-                        rows={4}
-                    />
-                    <br /><br />
-                    
-                    <TextField
-                        label='Image URL'
-                    />
-                    <br /><br />
+                    <br />
                     
                     <Button
                         variant='contained'
                         type='submit'
                     >
-                        Submit
+                        Buy
                     </Button>
                 </CardContent>
             </Box>
