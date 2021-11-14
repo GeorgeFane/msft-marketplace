@@ -44,7 +44,7 @@ contract Royalty {
             gamedev.send(amount*(devRoyalty/100));
             mktplace.send(amount*(mktRoyalty/100));
             creator.send(amount*(creatorRoyalty/100));
-            seller.transfer(remainder);
+            seller.send(remainder);
            
         }
 }
