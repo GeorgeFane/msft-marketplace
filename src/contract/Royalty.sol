@@ -6,8 +6,7 @@ contract Royalty {
     uint256 devRoyalty; //royalties for Game Dev
     uint256 creatorRoyalty; //royalties for Creator/artist
     
-    constructor (IERC1155 game) public{
-        _game = game;
+    constructor () public{
         admin = msg.sender;
     }
     //@Dev set royalty percentages
