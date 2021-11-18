@@ -9,7 +9,8 @@ import Customise from './pages/Customise';
 import Backpack from './pages/Backpack';
 import Listing from './pages/Listing';
 
-const pages = 'Login Marketplace Listing Backpack Customise'.split(' ');
+import Connect from './metamask/Connect';
+import Provider from './metamask/Provider';
 
 const shield = {
     image: 'https://image.shutterstock.com/image-illustration/metal-shield-isolated-on-white-260nw-324051260.jpg',
@@ -71,7 +72,7 @@ export default class App extends React.Component {
     render() {
         const { page, accounts, account } = this.state;
 
-        const getPage = {
+        const pages = {
             Login: <Login
                 accounts={accounts}
                 account={account}
@@ -81,6 +82,7 @@ export default class App extends React.Component {
                 getToken={c.getToken}
                 getBalance={c.getBalance}
                 account={account}
+                contract={c.contract}                
             />,
             Listing: <Listing
                 item={nft}
@@ -96,13 +98,13 @@ export default class App extends React.Component {
         return (
             <div>
                 <Header
-                    pages={pages}
+                    pages={Object.keys(pages)}
                     page={page}
                     setPage={this.setPage}
                 />
 
                 {
-                    getPage[page]
+                    pages[page]
                 }
             </div>
         );

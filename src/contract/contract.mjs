@@ -9,6 +9,7 @@ const contract = new web3.eth.Contract(abi, address)
 
 export async function getAccounts() {
     const rtn = await web3.eth.getAccounts();
+    console.log(rtn);
     return rtn;
 }
 

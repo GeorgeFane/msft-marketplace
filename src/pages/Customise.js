@@ -18,6 +18,9 @@ export default class MediaControlCard extends React.Component {
             id: 0,
             token: null,
             balance: 0,
+            name: '',
+            data: '',
+            image: '',
         };
     }
 
@@ -27,13 +30,17 @@ export default class MediaControlCard extends React.Component {
         const token = await getToken(id);
         console.log(token);
 
+        const image = '';
         const balance = await getBalance(account, id);
-        this.setState({ token, balance });
+        this.setState({ token, balance, image });
     }
 
     render() {
-        const { item } = this.props;
-        const { id, token, balance } = this.state;
+        const { contract, account } = this.props;
+        const {
+            id, token, balance,
+            image, name, data
+        } = this.state;
 
         if (token === null) {
             return <div />;
@@ -44,7 +51,7 @@ export default class MediaControlCard extends React.Component {
                 <CardMedia
                     component="img"
                     sx={{ width: '33%' }}
-                    src={token.image}
+                    src={image === '' ? token.image : image}
                     alt="Live from space album cover"
                 />
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -69,13 +76,17 @@ export default class MediaControlCard extends React.Component {
                             You have {balance}
                         </Typography>
                         <Typography variant="subtitle1" component="div">
-                            When 'Submit' is pressed, you lose the original item and the new customised item is minted
+                            When 'Submit' is pressed, you lose one unit of the original item and mint the new customised item
                         </Typography>
                     </CardContent>
 
                     <CardContent sx={{ flex: '1 0 auto' }}>
                         <TextField
                             label='Name'
+                            onChange={event => {
+                                const name = event.target.value;
+                                this.setState({ name });
+                            }}
                         />
                         <br /><br />
 
@@ -83,17 +94,36 @@ export default class MediaControlCard extends React.Component {
                             label='Description'
                             multiline
                             rows={4}
+                            onChange={event => {
+                                const data = event.target.value;
+                                this.setState({ data });
+                            }}
                         />
                         <br /><br />
                         
                         <TextField
                             label='Image URL'
+                            value={image}
+                            onChange={event => {
+                                const image = event.target.value;
+                                this.setState({ image });
+                            }}
                         />
                         <br /><br />
                         
                         <Button
                             variant='contained'
                             type='submit'
+                            onClick={() => {
+                                const from = account;
+                                contract.methods.mint(
+                                    1, data, name, token.tokenType, image
+                                ).send({ from });
+                                
+                                contract.methods.safeTransferFrom(
+                                    account, '0x0', id, 1, '0x0'
+                                ).send({ from });
+                            }}
                         >
                             Submit
                         </Button>

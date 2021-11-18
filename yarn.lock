@@ -1428,7 +1428,7 @@
     "@ethersproject/properties" "^5.4.0"
     "@ethersproject/strings" "^5.4.0"
 
-"@ethersproject/keccak256@^5.0.3", "@ethersproject/keccak256@^5.4.0":
+"@ethersproject/keccak256@^5.0.0-beta.130", "@ethersproject/keccak256@^5.0.3", "@ethersproject/keccak256@^5.4.0":
   "integrity" "sha512-FBI1plWet+dPUvAzPAeHzRKiPpETQzqSUWR1wXJGHVWi4i8bOSrpC3NwpkPjgeXG7MnugVc1B42VbfnQikyC/A=="
   "resolved" "https://registry.npmjs.org/@ethersproject/keccak256/-/keccak256-5.4.0.tgz"
   "version" "5.4.0"
@@ -2628,6 +2628,38 @@
   dependencies:
     "@typescript-eslint/types" "4.15.2"
     "eslint-visitor-keys" "^2.0.0"
+
+"@web3-react/abstract-connector@^6.0.7":
+  "integrity" "sha512-RhQasA4Ox8CxUC0OENc1AJJm8UTybu/oOCM61Zjg6y0iF7Z0sqv1Ai1VdhC33hrQpA8qSBgoXN9PaP8jKmtdqg=="
+  "resolved" "https://registry.npmjs.org/@web3-react/abstract-connector/-/abstract-connector-6.0.7.tgz"
+  "version" "6.0.7"
+  dependencies:
+    "@web3-react/types" "^6.0.7"
+
+"@web3-react/core@^6.1.9":
+  "integrity" "sha512-P877DslsbAkWIlMANpWiK7pCvNwlz0kJC0EGckuVh0wlA23J4UnFxq6xyOaxkxaDCu14rA/tAO0NbwjcXTQgSA=="
+  "resolved" "https://registry.npmjs.org/@web3-react/core/-/core-6.1.9.tgz"
+  "version" "6.1.9"
+  dependencies:
+    "@ethersproject/keccak256" "^5.0.0-beta.130"
+    "@web3-react/abstract-connector" "^6.0.7"
+    "@web3-react/types" "^6.0.7"
+    "tiny-invariant" "^1.0.6"
+    "tiny-warning" "^1.0.3"
+
+"@web3-react/injected-connector@^6.0.7":
+  "integrity" "sha512-Y7aJSz6pg+MWKtvdyuqyy6LWuH+4Tqtph1LWfiyVms9II9ar/9B/de4R8wh4wjg91wmHkU+D75yP09E/Soh2RA=="
+  "resolved" "https://registry.npmjs.org/@web3-react/injected-connector/-/injected-connector-6.0.7.tgz"
+  "version" "6.0.7"
+  dependencies:
+    "@web3-react/abstract-connector" "^6.0.7"
+    "@web3-react/types" "^6.0.7"
+    "tiny-warning" "^1.0.3"
+
+"@web3-react/types@^6.0.7":
+  "integrity" "sha512-ofGmfDhxmNT1/P/MgVa8IKSkCStFiyvXe+U5tyZurKdrtTDFU+wJ/LxClPDtFerWpczNFPUSrKcuhfPX1sI6+A=="
+  "resolved" "https://registry.npmjs.org/@web3-react/types/-/types-6.0.7.tgz"
+  "version" "6.0.7"
 
 "@webassemblyjs/ast@1.9.0":
   "integrity" "sha512-C6wW5L+b7ogSDVqymbkkvuW9kruN//YisMED04xzeBBqjHa2FYnmvOlS6Xj68xWQRgWvI9cIglsjFowH/RJyEA=="
@@ -10709,7 +10741,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@*", "react@^17.0.2", "react@>= 16", "react@>=16.6.0", "react@>=16.8.0", "react@>=16.8.0 <18.0.0", "react@17.0.2":
+"react@*", "react@^17.0.2", "react@>= 16", "react@>=16.6.0", "react@>=16.8", "react@>=16.8.0", "react@>=16.8.0 <18.0.0", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"
@@ -12304,6 +12336,16 @@
   "integrity" "sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q="
   "resolved" "https://registry.npmjs.org/timsort/-/timsort-0.3.0.tgz"
   "version" "0.3.0"
+
+"tiny-invariant@^1.0.6":
+  "integrity" "sha512-1Uhn/aqw5C6RI4KejVeTg6mIS7IqxnLJ8Mv2tV5rTc0qWobay7pDUz6Wi392Cnc8ak1H0F2cjoRzb2/AW4+Fvg=="
+  "resolved" "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.2.0.tgz"
+  "version" "1.2.0"
+
+"tiny-warning@^1.0.3":
+  "integrity" "sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA=="
+  "resolved" "https://registry.npmjs.org/tiny-warning/-/tiny-warning-1.0.3.tgz"
+  "version" "1.0.3"
 
 "tmpl@1.0.x":
   "integrity" "sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE="
