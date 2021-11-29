@@ -11,7 +11,7 @@ import { GitHub } from '@mui/icons-material';
 import logo from './logo.png';
 import BasicTabs from './BasicTabs';
 
-export default function ButtonAppBar({ pages, page, setPage }) {
+export default function ButtonAppBar({ pages, page, setPage, account }) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar>
@@ -24,6 +24,10 @@ export default function ButtonAppBar({ pages, page, setPage }) {
 
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         NFT Marketplace
+                    </Typography>
+
+                    <Typography sx={{ flexGrow: 1 }}>
+                        {/* {account.substring(0, 5)}... */}
                     </Typography>
 
                     <BasicTabs

@@ -27,7 +27,9 @@ export default function BasicGrid({ accounts, account, setAccount }) {
         >
             <Grid item xs={6}>
                 <Item>
-                    <Provider />
+                    <Provider
+                        setAccount={setAccount}
+                    />
                 </Item>
             </Grid>   
         </Grid>

@@ -7,10 +7,13 @@ function getLibrary(provider) {
     return new Web3(provider)
 }
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, setAccount }) {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
-            <Connect {...pageProps} />
+            <Connect
+                {...pageProps}
+                setAccount={setAccount}
+            />
         </Web3ReactProvider>
     )
 }

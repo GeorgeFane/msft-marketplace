@@ -1,6 +1,7 @@
 import * as React from 'react';
+import Web3 from 'web3';
 
-import * as c from './contract/contract.mjs';
+// import * as c from './contract/contract.mjs';
 import Header from './header/Header';
 
 import BasicGrid from './pages/BasicGrid';
@@ -11,6 +12,9 @@ import Listing from './pages/Listing';
 
 import Connect from './metamask/Connect';
 import Provider from './metamask/Provider';
+import abi from './contract/abi.json';
+
+const contractAddress = '0x0a632692F9b491cA9e32ADb79deCebf98Fc34918';
 
 const shield = {
     image: 'https://image.shutterstock.com/image-illustration/metal-shield-isolated-on-white-260nw-324051260.jpg',
@@ -52,25 +56,33 @@ export default class App extends React.Component {
             accounts: [],
             page: 'Login',
             account: '',
+
+            web3: '',
+            contract: '',
         }
     }
 
     async componentDidMount() {
-        const admin = await c.contract.methods.admin().call();
-        const tokenTypes = await c.contract.methods.getTokenTypes().call();
+        const web3 = new Web3(Web3.givenProvider);
+        const contract = new web3.eth.Contract(abi, contractAddress);
+        const address = web3.currentProvider.selectedAddress;
 
-        const accounts = await c.web3.eth.getAccounts();
+        const admin = await contract.methods.admin().call();
+        const tokenTypes = await contract.methods.getTokenTypes().call();
 
-        console.log(this.state.account);
+        const accounts = await web3.eth.getAccounts();
+
+        console.log(address, admin, tokenTypes, accounts);
 
         this.setState({ admin, tokenTypes, accounts });
     }
 
     setPage = page => this.setState({ page });
-    setAccount = account => this.setState({ account });
+    setAccount = (account, web3, contract) => this.setState({ account, web3, contract });
 
     render() {
         const { page, accounts, account } = this.state;
+        console.log(account);
 
         const pages = {
             Login: <Login
@@ -78,12 +90,12 @@ export default class App extends React.Component {
                 account={account}
                 setAccount={this.setAccount}
             />,
-            Customise: <Customise
-                getToken={c.getToken}
-                getBalance={c.getBalance}
-                account={account}
-                contract={c.contract}                
-            />,
+            // Customise: <Customise
+            //     getToken={c.getToken}
+            //     getBalance={c.getBalance}
+            //     account={account}
+            //     contract={c.contract}                
+            // />,
             Listing: <Listing
                 item={nft}
             />,
@@ -101,6 +113,7 @@ export default class App extends React.Component {
                     pages={Object.keys(pages)}
                     page={page}
                     setPage={this.setPage}
+                    account={account}
                 />
 
                 {

@@ -23,14 +23,20 @@ contract Msft is ERC1155("NftMarketplace") {
     function getTokenTypes() public view returns (string[] memory) {
         return tokenTypes;
     }
+
+    mapping(uint => Royalty[]) public royaltyTable;
     
-    struct royalty {
+    function getRoyaltys(uint256 i) public view returns (Royalty[] memory) {
+        return royaltyTable[i];
+    }
+    
+    struct Royalty {
         address payable royal;
         uint256 percent; // must be 1 - 100
     }
     
     // mint
-    struct token {
+    struct Token {
         string name;
         string data;
         string image;
@@ -39,10 +45,9 @@ contract Msft is ERC1155("NftMarketplace") {
         uint256 tokenType;
         
         address creator;
-        royalty[] royaltys;
     }
     
-    token[] public tokens;
+    Token[] public tokens;
     
     function mint(
         string memory name,
@@ -53,9 +58,8 @@ contract Msft is ERC1155("NftMarketplace") {
     ) public {
         require(tokenType < tokenTypes.length); // makes sure that tokenType exists
         _mint(msg.sender, tokens.length, amount, bytes(data));
-        
-        royalty[] memory royaltys;
-        tokens.push(token(name, data, image, amount, tokenType, msg.sender, royaltys));
+
+        tokens.push(Token(name, data, image, amount, tokenType, msg.sender));
     }
     
     function createRoyalty(
@@ -65,8 +69,8 @@ contract Msft is ERC1155("NftMarketplace") {
     ) public {
         require(msg.sender == tokens[tokenId].creator && amount < 99);
         // check total < 100
-        royalty memory r = royalty(royal, amount);
-        tokens[tokenId].royaltys.push(r);
+        Royalty memory r = Royalty(royal, amount);
+        royaltyTable[tokenId].push(r);
     }
     
     function buyToken(
@@ -75,16 +79,16 @@ contract Msft is ERC1155("NftMarketplace") {
     ) public payable {
         safeTransferFrom(owner, msg.sender, tokenId, 1, bytes(''));
         
-        royalty[] memory royaltys = tokens[tokenId].royaltys;
+        Royalty[] memory royaltys = royaltyTable[tokenId];
         uint256 total = 0;
         for (uint256 i = 0; i < royaltys.length; i++) {
-            royalty memory r = royaltys[i];
+            Royalty memory r = royaltys[i];
             uint256 part = msg.value * r.percent / 100;
-            r.royal.send(part);
+            r.royal.transfer(part);
             total += r.percent;
         }
         
-        owner.send(msg.value * (100 - total) / 100);
+        owner.transfer(msg.value * (100 - total) / 100);
     }
     
     // when trading just items, also add txn fee that goes to msft and also pays creator/royalties
