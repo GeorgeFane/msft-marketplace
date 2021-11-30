@@ -30,6 +30,7 @@ export default function BasicGrid({ accounts, account, setAccount }) {
                     <Provider
                         setAccount={setAccount}
                     />
+                    {accounts}
                 </Item>
             </Grid>   
         </Grid>

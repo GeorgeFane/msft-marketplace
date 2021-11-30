@@ -4,7 +4,7 @@ import Web3 from 'web3';
 // import * as c from './contract/contract.mjs';
 import Header from './header/Header';
 
-import BasicGrid from './pages/BasicGrid';
+import Trades from './pages/Trades';
 import Login from './pages/Login';
 import Customise from './pages/Customise';
 import Backpack from './pages/Backpack';
@@ -65,24 +65,34 @@ export default class App extends React.Component {
     async componentDidMount() {
         const web3 = new Web3(Web3.givenProvider);
         const contract = new web3.eth.Contract(abi, contractAddress);
-        const address = web3.currentProvider.selectedAddress;
+        const account = web3.currentProvider.selectedAddress;
 
         const admin = await contract.methods.admin().call();
         const tokenTypes = await contract.methods.getTokenTypes().call();
 
         const accounts = await web3.eth.getAccounts();
 
-        console.log(address, admin, tokenTypes, accounts);
+        console.log(accounts);
 
-        this.setState({ admin, tokenTypes, accounts });
+        this.setState({ account, admin, tokenTypes, accounts, web3, contract });
     }
 
     setPage = page => this.setState({ page });
     setAccount = (account, web3, contract) => this.setState({ account, web3, contract });
 
     render() {
-        const { page, accounts, account } = this.state;
-        console.log(account);
+        const { page, accounts, account, contract } = this.state;
+
+        async function getToken(id) {
+            const rtn = await contract.methods.tokens(id).call();
+            console.log(rtn);
+            return rtn;
+        }
+        
+        async function getBalance(from, id) {
+            const rtn = await contract.methods.balanceOf(from, id).call();
+            return rtn;
+        }
 
         const pages = {
             Login: <Login
@@ -90,12 +100,16 @@ export default class App extends React.Component {
                 account={account}
                 setAccount={this.setAccount}
             />,
-            // Customise: <Customise
-            //     getToken={c.getToken}
-            //     getBalance={c.getBalance}
-            //     account={account}
-            //     contract={c.contract}                
-            // />,
+            Trades: <Trades
+                getToken={getToken}
+                backpack={backpack}
+            />,
+            Customise: <Customise
+                getToken={getToken}
+                getBalance={getBalance}
+                account={account}
+                contract={contract}                
+            />,
             Listing: <Listing
                 item={nft}
             />,

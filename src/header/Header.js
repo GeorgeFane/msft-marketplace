@@ -27,7 +27,7 @@ export default function ButtonAppBar({ pages, page, setPage, account }) {
                     </Typography>
 
                     <Typography sx={{ flexGrow: 1 }}>
-                        {/* {account.substring(0, 5)}... */}
+                        {account.substring(0, 9)}...
                     </Typography>
 
                     <BasicTabs

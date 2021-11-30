@@ -9,7 +9,9 @@ import Typography from '@mui/material/Typography';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
-import { CardActions, Button, TextField } from '@mui/material';
+import { CardActions, Button, TextField, Divider } from '@mui/material';
+
+const zeroAddress = '0x42B221DFf0A38c56409032bD2b1D3E6f7cAEdb4B';
 
 export default class MediaControlCard extends React.Component {
     constructor(props) {
@@ -21,6 +23,9 @@ export default class MediaControlCard extends React.Component {
             name: '',
             data: '',
             image: '',
+
+            bid: 0,
+            seller: '',
         };
     }
 
@@ -39,7 +44,8 @@ export default class MediaControlCard extends React.Component {
         const { contract, account } = this.props;
         const {
             id, token, balance,
-            image, name, data
+            image, name, data,
+            bid, seller
         } = this.state;
 
         if (token === null) {
@@ -78,6 +84,51 @@ export default class MediaControlCard extends React.Component {
                         <Typography variant="subtitle1" component="div">
                             When 'Submit' is pressed, you lose one unit of the original item and mint the new customised item
                         </Typography>
+
+                        <Divider />
+                    </CardContent>
+
+                    <CardContent sx={{ flex: '1 0 auto' }}>
+                        <TextField
+                            label='Buy From Whom?'
+                            value={seller}
+                            onChange={event => {
+                                const seller = event.target.value;
+                                this.setState({ seller });
+                            }}
+                        />
+                        
+                        <br /><br />
+
+                        <TextField
+                            label='Your Bid'
+                            helperText="Units of 100 wei"
+                            type='number'
+                            value={bid}
+                            onChange={event => {
+                                const bid = event.target.value;
+                                this.setState({ bid });
+                            }}
+                        />
+                        
+                        <br /><br />
+
+                        <Button
+                            variant='contained'
+                            type='submit'
+                            onClick={() => {
+                                const from = account;
+                                console.log(seller);
+                                
+                                contract.methods.buyToken(
+                                    seller, token.tokenType
+                                ).send({ from, value: bid * 100 });
+                            }}
+                        >
+                            Buy
+                        </Button>
+
+                        <Divider />
                     </CardContent>
 
                     <CardContent sx={{ flex: '1 0 auto' }}>
@@ -117,11 +168,11 @@ export default class MediaControlCard extends React.Component {
                             onClick={() => {
                                 const from = account;
                                 contract.methods.mint(
-                                    1, data, name, token.tokenType, image
+                                    name, data, image, 1, token.tokenType
                                 ).send({ from });
                                 
                                 contract.methods.safeTransferFrom(
-                                    account, '0x0', id, 1, '0x0'
+                                    account, zeroAddress, id, 1, '0x0'
                                 ).send({ from });
                             }}
                         >
