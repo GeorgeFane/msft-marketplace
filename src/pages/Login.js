@@ -15,7 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-export default function BasicGrid({ accounts, account, setAccount }) {
+export default function BasicGrid({ setAccount }) {
     return (
         <Grid
             container
@@ -30,7 +30,6 @@ export default function BasicGrid({ accounts, account, setAccount }) {
                     <Provider
                         setAccount={setAccount}
                     />
-                    {accounts}
                 </Item>
             </Grid>   
         </Grid>

@@ -27,13 +27,14 @@ export default function ButtonAppBar({ pages, page, setPage, account }) {
                     </Typography>
 
                     <Typography sx={{ flexGrow: 1 }}>
-                        {account.substring(0, 9)}...
+                        {account}
                     </Typography>
 
                     <BasicTabs
                         pages={pages}
                         page={page}
                         setPage={setPage}
+                        disabled={account === ''}
                     />
 
                     <IconButton

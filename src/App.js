@@ -1,12 +1,13 @@
 import * as React from 'react';
 import Web3 from 'web3';
+import { useWeb3React } from "@web3-react/core"
 
 // import * as c from './contract/contract.mjs';
 import Header from './header/Header';
 
 import Trades from './pages/Trades';
 import Login from './pages/Login';
-import Customise from './pages/Customise';
+import Item from './pages/Item';
 import Backpack from './pages/Backpack';
 import Listing from './pages/Listing';
 
@@ -65,10 +66,10 @@ export default class App extends React.Component {
     async componentDidMount() {
         const web3 = new Web3(Web3.givenProvider);
         const contract = new web3.eth.Contract(abi, contractAddress);
-        const account = web3.currentProvider.selectedAddress;
 
         const admin = await contract.methods.admin().call();
         const tokenTypes = await contract.methods.getTokenTypes().call();
+        const account = web3.currentProvider.selectedAddress;
 
         const accounts = await web3.eth.getAccounts();
 
@@ -96,15 +97,13 @@ export default class App extends React.Component {
 
         const pages = {
             Login: <Login
-                accounts={accounts}
-                account={account}
                 setAccount={this.setAccount}
             />,
             Trades: <Trades
                 getToken={getToken}
                 backpack={backpack}
             />,
-            Customise: <Customise
+            Item: <Item
                 getToken={getToken}
                 getBalance={getBalance}
                 account={account}

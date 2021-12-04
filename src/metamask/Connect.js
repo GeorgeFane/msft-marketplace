@@ -19,14 +19,6 @@ export default function Home({ setAccount }) {
     async function connect() {
         try {
             await activate(injected)
-            // const web3 = new Web3(Web3.givenProvider);
-
-            // const contract = new web3.eth.Contract(abi, contractAddress);
-            // const admin = await contract.methods.admin().call();
-            // console.log(admin, web3.currentProvider.selectedAddress);
-
-            // const address = web3.currentProvider.selectedAddress;
-            // setAccount(address, web3, contract);
         } catch (ex) {
             console.log(ex)
         }
@@ -48,7 +40,6 @@ export default function Home({ setAccount }) {
             <Button
                 onClick={() => {
                     connect();
-                    setAccount(account);
                 }}
                 variant='contained'
             >

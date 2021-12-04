@@ -4,6 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { AppBar } from '@mui/material';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -31,18 +32,19 @@ TabPanel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-export default function BasicTabs({ pages, page, setPage, disabled }) {
+export default function BasicTabs({ pages }) {
+    const [page, setPage] = React.useState('Customise');
     const handleChange = (event, newValue) => {
         setPage(newValue);
     };
 
-    const tabs = pages.map(page => (
-        <Tab label={page} value={page} disabled={disabled} />
+    const tabs = Object.keys(pages).map(label => (
+        <Tab label={label} value={label} />
     ));
 
     return (
         <Box>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <AppBar position="static">
                 <Tabs
                     value={page}
                     onChange={handleChange}
@@ -52,6 +54,10 @@ export default function BasicTabs({ pages, page, setPage, disabled }) {
                 >
                     {tabs}
                 </Tabs>
+            </AppBar>
+
+            <Box m={2}>
+                {pages[page]}
             </Box>
         </Box>
     );
