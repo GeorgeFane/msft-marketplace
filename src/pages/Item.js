@@ -109,12 +109,13 @@ export default class MediaControlCard extends React.Component {
                         }
 
                         const from = account;
-                        contract.methods.mint(
-                            name, data, image, 1, token.tokenType
-                        ).send({ from });
                         
                         contract.methods.safeTransferFrom(
                             account, zeroAddress, id, 1, '0x0'
+                        ).send({ from });
+
+                        contract.methods.mint(
+                            name, data, image, 1, token.tokenType
                         ).send({ from });
                     }}
                 />
@@ -309,8 +310,6 @@ export default class MediaControlCard extends React.Component {
                         <BasicTabs
                             pages={pages}
                         />
-
-                        <Divider />
                     </CardContent>
 
                 </Box>

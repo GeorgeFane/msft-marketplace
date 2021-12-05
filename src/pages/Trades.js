@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { Paper, Badge } from '@mui/material';
+import { Paper, Badge, CardMedia, Card, Typography, TextField } from '@mui/material';
 
 import { ArrowForward } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
@@ -11,43 +11,45 @@ import AlertDialog from './itemActions/AlertDialog';
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
     padding: theme.spacing(1),
-    textAlign: 'center',
+    // textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
 
 const trades = [
     [
         [
-            [5, 0],
-            [20, 2],
+            [0, 5],
+            [1, 20],
         ],
         [
-            [1, 3]
+            [2, 1]
         ]
     ],
     [
         [
-            [1, 0],
-            [1, 2],
+            [0, 1],
+            [1, 1],
         ],
         [
-            [1, 1]
+            [3, 1]
         ]
     ],
 ]
 
-export default function BasicButtons({ getToken, backpack }) {
+export default function BasicButtons({ getToken, tokens }) {
+    const [trader, setTrader] = React.useState();
+    console.log(tokens);
 
     function plus(side) {
-        return side.map( ( [num, id] ) => (
+        return side.map( ( [id, num] ) => (
             <Badge
                 badgeContent={num}
                 color='primary'
             >
                 <img
-                    src={backpack[id].image}
+                    src={tokens[id].image}
                     height='99'
-                    alt={backpack[id].name}
+                    alt={tokens[id].name}
                 />
             </Badge>
         ));
@@ -69,6 +71,15 @@ export default function BasicButtons({ getToken, backpack }) {
 
         // return badges;
     }
+
+    const allItems = tokens.map(token => (
+        <CardMedia
+            component="img"
+            sx={{ height: '99px', width: '99px' }}
+            src={token.image}
+            alt="Live from space album cover"
+        />
+    ));
 
     const title = `
         Trade your stuff for their stuff?
@@ -99,6 +110,27 @@ export default function BasicButtons({ getToken, backpack }) {
 
     return (
         <Stack spacing={2} direction="column">
+            <Typography>
+                All Items
+            </Typography>
+
+            <Card sx={{ display: 'flex', p: 2 }}>
+                {allItems}
+            </Card>
+            
+            <Typography>
+                Trades
+            </Typography>
+
+            <TextField
+                label='Trade With Whom?'
+                style={{ width: 222 }}
+                onChange={event => {
+                    const trader = event.target.value;
+                    this.setState({ trader });
+                }}
+            />
+
             {papers}
         </Stack>
     );

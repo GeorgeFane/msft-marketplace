@@ -54,6 +54,7 @@ export default class App extends React.Component {
         this.state = {
             admin: '',
             tokenTypes: [],
+            tokens: [],
             accounts: [],
             page: 'Login',
             account: '',
@@ -64,25 +65,31 @@ export default class App extends React.Component {
     }
 
     async componentDidMount() {
+        console.log(Web3);
+        if (Web3.givenProvider === null) {
+            return;
+        }
         const web3 = new Web3(Web3.givenProvider);
         const contract = new web3.eth.Contract(abi, contractAddress);
+        console.log(web3, contract);
 
         const admin = await contract.methods.admin().call();
         const tokenTypes = await contract.methods.getTokenTypes().call();
+        const tokens = await contract.methods.getTokens().call();
         const account = web3.currentProvider.selectedAddress;
 
         const accounts = await web3.eth.getAccounts();
 
         console.log(accounts);
 
-        this.setState({ account, admin, tokenTypes, accounts, web3, contract });
+        this.setState({ account, admin, tokenTypes, accounts, web3, contract, tokens });
     }
 
     setPage = page => this.setState({ page });
     setAccount = (account, web3, contract) => this.setState({ account, web3, contract });
 
     render() {
-        const { page, accounts, account, contract } = this.state;
+        const { page, accounts, account, contract, tokens } = this.state;
 
         async function getToken(id) {
             const rtn = await contract.methods.tokens(id).call();
@@ -114,6 +121,7 @@ export default class App extends React.Component {
             Trades: <Trades
                 getToken={getToken}
                 backpack={backpack}
+                tokens={tokens}
             />,
         }
 

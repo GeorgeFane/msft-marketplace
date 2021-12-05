@@ -38,9 +38,7 @@ export default function Home({ setAccount }) {
     return (
         <div>
             <Button
-                onClick={() => {
-                    connect();
-                }}
+                onClick={connect}
                 variant='contained'
             >
                 Connect to MetaMask
