@@ -15,7 +15,7 @@ import Connect from './metamask/Connect';
 import Provider from './metamask/Provider';
 import abi from './contract/abi.json';
 
-const contractAddress = '0x0a632692F9b491cA9e32ADb79deCebf98Fc34918';
+const contractAddress = '0xe052Df81992Dd4C55d135A6221cAD0a55721A09b';
 
 const shield = {
     image: 'https://image.shutterstock.com/image-illustration/metal-shield-isolated-on-white-260nw-324051260.jpg',

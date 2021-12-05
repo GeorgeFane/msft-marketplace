@@ -49,6 +49,10 @@ contract Msft is ERC1155("NftMarketplace") {
     }
     
     Token[] public tokens;
+
+    function getTokens() public view returns (Token[] memory) {
+        return tokens;
+    }
     
     function mint(
         string memory name,
@@ -64,14 +68,14 @@ contract Msft is ERC1155("NftMarketplace") {
     }
     
     function createRoyalty(
-        address payable royal,
         uint256 tokenId,
+        address payable royal,
         uint256 amount // [1, 99]
     ) public {
         require(
             msg.sender == tokens[tokenId].creator &&
             amount < 99 &&
-            tokens[tokenId].totalRoy + amount <= 100)
+            tokens[tokenId].totalRoy + amount <= 100
         );
         tokens[tokenId].totalRoy += amount;
 
@@ -79,12 +83,31 @@ contract Msft is ERC1155("NftMarketplace") {
         royaltyTable[tokenId].push(r);
     }
     
+    // type fractional
+    // represented by another coin with the name FRAC "original name"
+    // if sold, change original token's royalty array
+    // called by buyer
+    function changeRoyalty(
+        uint256 tokenId,
+        address payable royal
+    ) public payable returns (bool success) {
+        Royalty[] memory royaltys = royaltyTable[tokenId];
+        for (uint256 i = 0; i < royaltys.length; i++) {
+            Royalty memory r = royaltys[i];
+            if (r.royal == royal) {
+                address buyer = msg.sender;
+                royaltyTable[tokenId][i].royal = payable(buyer);
+                royal.transfer(msg.value);
+                return true;
+            }
+        }
+        return false;
+    }
+    
     function buyToken(
-        address payable owner,
-        uint256 tokenId
+        uint256 tokenId,
+        address payable owner
     ) public payable {
-        safeTransferFrom(owner, msg.sender, tokenId, 1, bytes(''));
-        
         Royalty[] memory royaltys = royaltyTable[tokenId];
         uint256 total = 0;
         for (uint256 i = 0; i < royaltys.length; i++) {

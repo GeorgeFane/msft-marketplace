@@ -175,12 +175,15 @@ export default class MediaControlCard extends React.Component {
                             return;
                         }
 
-                        const from = account;
-                        console.log(seller);
-                        
+                        // you pay seller and handle royaltys
                         contract.methods.buyToken(
                             seller, token.tokenType
-                        ).send({ from, value: bid * 100 });
+                        ).send({ from: account, value: bid * 100 });
+                        
+                        // seller transfers token to you
+                        contract.methods.safeTransferFrom(
+                            seller, account, id, 1, '0x0'
+                        ).send({ from: seller });
                     }}
                 />
                         
