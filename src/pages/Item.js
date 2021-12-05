@@ -33,66 +33,15 @@ export default class MediaControlCard extends React.Component {
     }
 
     async componentDidMount() {
-        const { getToken, getBalance, account } = this.props;
+        const { getToken, getBalance, account, seller } = this.props;
         const { id } = this.state;
         const token = await getToken(id);
         console.log(token);
 
         const image = '';
         const balance = await getBalance(account, id);
+
         this.setState({ token, balance, image });
-    }
-
-    Buy() {
-        const { contract, account } = this.props;
-        const {
-            id, token, balance,
-            image, name, data,
-            bid, seller
-        } = this.state;
-
-        return (
-            <Box>
-                <TextField
-                    label='Buy From Whom?'
-                    value={seller}
-                    onChange={event => {
-                        const seller = event.target.value;
-                        this.setState({ seller });
-                    }}
-                />
-                
-                <br /><br />
-
-                <TextField
-                    label='Your Bid'
-                    helperText="Units of 100 wei"
-                    type='number'
-                    value={bid}
-                    onChange={event => {
-                        const bid = event.target.value;
-                        this.setState({ bid });
-                    }}
-                />
-                
-                <br /><br />
-
-                <Button
-                    variant='contained'
-                    type='submit'
-                    onClick={() => {
-                        const from = account;
-                        console.log(seller);
-                        
-                        contract.methods.buyToken(
-                            seller, token.tokenType
-                        ).send({ from, value: bid * 100 });
-                    }}
-                >
-                    Buy
-                </Button>
-            </Box>
-        )
     }
 
     Customise() {
@@ -169,6 +118,135 @@ export default class MediaControlCard extends React.Component {
         );
     }
 
+    Buy() {
+        const { contract, account } = this.props;
+        const {
+            id, token, balance,
+            image, name, data,
+            bid, seller, sellerBalance,
+        } = this.state;
+
+        const title = `
+            Buy one "${token.name}" from "${seller}" for ${bid * 100} wei?
+        `;
+
+        const description = `
+            You'll call the "buyToken" function,
+            which "safeTransferFrom"s one token to you
+            and distributes your bid price to all addresses specified
+            in the token's royalty array
+        `
+
+        return (
+            <Box>
+                <TextField
+                    label='Buy From Whom?'
+                    value={seller}
+                    onChange={event => {
+                        const seller = event.target.value;
+                        this.setState({ seller });
+                    }}
+                />
+                
+                <br /><br />
+
+                <TextField
+                    label='Your Bid'
+                    helperText="Units of 100 wei"
+                    type='number'
+                    value={bid}
+                    onChange={event => {
+                        const bid = event.target.value;
+                        this.setState({ bid });
+                    }}
+                />
+                
+                <br /><br />
+                
+                <AlertDialog
+                    title={title}
+                    description={description}
+                    action={() => {
+                        if (seller === '') {
+                            return;
+                        }
+
+                        const from = account;
+                        console.log(seller);
+                        
+                        contract.methods.buyToken(
+                            seller, token.tokenType
+                        ).send({ from, value: bid * 100 });
+                    }}
+                />
+            </Box>
+        )
+    }
+
+    Royalty() {
+        const { contract, account } = this.props;
+        const {
+            id, token, balance,
+            image, name, data,
+            bid, seller, sellerBalance,
+        } = this.state;
+
+        const title = `
+            Give "${seller}" ${bid}% of every subsequent sale?
+        `;
+
+        const description = `
+            You'll call the "buyToken" function,
+            which "safeTransferFrom"s one token to you
+            and distributes your bid price to all addresses specified
+            in the token's royalty array
+        `
+
+        return (
+            <Box>
+                <TextField
+                    label='Royal Address'
+                    value={seller}
+                    onChange={event => {
+                        const seller = event.target.value;
+                        this.setState({ seller });
+                    }}
+                />
+                
+                <br /><br />
+
+                <TextField
+                    label='Percentage'
+                    type='number'
+                    value={bid}
+                    onChange={event => {
+                        const bid = event.target.value;
+                        this.setState({ bid });
+                    }}
+                />
+                
+                <br /><br />
+                
+                <AlertDialog
+                    title={title}
+                    description={description}
+                    action={() => {
+                        if (seller === '') {
+                            return;
+                        }
+
+                        const from = account;
+                        console.log(seller);
+                        
+                        contract.methods.buyToken(
+                            seller, token.tokenType
+                        ).send({ from, value: bid * 100 });
+                    }}
+                />
+            </Box>
+        )
+    }
+
     render() {
         const { contract, account } = this.props;
         const {
@@ -184,6 +262,7 @@ export default class MediaControlCard extends React.Component {
         const pages = {
             Customise: this.Customise(),
             Buy: this.Buy(),
+            Royalty: this.Royalty(),
         }
 
         return (
@@ -214,9 +293,6 @@ export default class MediaControlCard extends React.Component {
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
                             You have {balance}
-                        </Typography>
-                        <Typography variant="subtitle1" component="div">
-                            When 'Submit' is pressed, you lose one unit of the original item and mint the new customised item
                         </Typography>
 
                         <BasicTabs

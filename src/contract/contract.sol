@@ -45,6 +45,7 @@ contract Msft is ERC1155("NftMarketplace") {
         uint256 tokenType;
         
         address creator;
+        uint256 totalRoy;
     }
     
     Token[] public tokens;
@@ -59,16 +60,21 @@ contract Msft is ERC1155("NftMarketplace") {
         require(tokenType < tokenTypes.length); // makes sure that tokenType exists
         _mint(msg.sender, tokens.length, amount, bytes(data));
 
-        tokens.push(Token(name, data, image, amount, tokenType, msg.sender));
+        tokens.push(Token(name, data, image, amount, tokenType, msg.sender, 0));
     }
     
     function createRoyalty(
         address payable royal,
         uint256 tokenId,
-        uint256 amount // 1 - 100
+        uint256 amount // [1, 99]
     ) public {
-        require(msg.sender == tokens[tokenId].creator && amount < 99);
-        // check total < 100
+        require(
+            msg.sender == tokens[tokenId].creator &&
+            amount < 99 &&
+            tokens[tokenId].totalRoy + amount <= 100)
+        );
+        tokens[tokenId].totalRoy += amount;
+
         Royalty memory r = Royalty(royal, amount);
         royaltyTable[tokenId].push(r);
     }

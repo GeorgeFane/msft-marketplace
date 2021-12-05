@@ -99,15 +99,15 @@ export default class App extends React.Component {
             Login: <Login
                 setAccount={this.setAccount}
             />,
-            Trades: <Trades
-                getToken={getToken}
-                backpack={backpack}
-            />,
             Item: <Item
                 getToken={getToken}
                 getBalance={getBalance}
                 account={account}
                 contract={contract}                
+            />,
+            Trades: <Trades
+                getToken={getToken}
+                backpack={backpack}
             />,
             Listing: <Listing
                 item={nft}
