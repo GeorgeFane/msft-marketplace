@@ -94,6 +94,11 @@ export default class App extends React.Component {
             const rtn = await contract.methods.balanceOf(from, id).call();
             return rtn;
         }
+        
+        async function getRoyaltys(id) {
+            const rtn = await contract.methods.getRoyaltys(id).call();
+            return rtn;
+        }
 
         const pages = {
             Login: <Login
@@ -102,6 +107,7 @@ export default class App extends React.Component {
             Item: <Item
                 getToken={getToken}
                 getBalance={getBalance}
+                getRoyaltys={getRoyaltys}
                 account={account}
                 contract={contract}                
             />,
@@ -109,15 +115,6 @@ export default class App extends React.Component {
                 getToken={getToken}
                 backpack={backpack}
             />,
-            Listing: <Listing
-                item={nft}
-            />,
-            Backpack: <Backpack
-                backpack={backpack}
-            />,
-            // Backpack: <BasicGrid
-            //     accounts={accounts}
-            // />,
         }
 
         return (

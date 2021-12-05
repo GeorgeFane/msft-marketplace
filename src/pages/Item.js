@@ -29,11 +29,12 @@ export default class MediaControlCard extends React.Component {
 
             bid: 0,
             seller: '',
+            royaltys: null,
         };
     }
 
     async componentDidMount() {
-        const { getToken, getBalance, account, seller } = this.props;
+        const { getToken, getBalance, account, seller, getRoyaltys } = this.props;
         const { id } = this.state;
         const token = await getToken(id);
         console.log(token);
@@ -41,7 +42,10 @@ export default class MediaControlCard extends React.Component {
         const image = '';
         const balance = await getBalance(account, id);
 
-        this.setState({ token, balance, image });
+        const royaltys = await getRoyaltys(id);
+        console.log(royaltys);
+
+        this.setState({ token, balance, image, royaltys });
     }
 
     Customise() {
@@ -123,7 +127,7 @@ export default class MediaControlCard extends React.Component {
         const {
             id, token, balance,
             image, name, data,
-            bid, seller, sellerBalance,
+            bid, seller, sellerBalance, royaltys,
         } = this.state;
 
         const title = `
@@ -179,6 +183,10 @@ export default class MediaControlCard extends React.Component {
                         ).send({ from, value: bid * 100 });
                     }}
                 />
+                        
+    `           <Typography variant="subtitle1" component="div">
+                    Royalties: {JSON.stringify(royaltys, null, 4)}
+                </Typography>
             </Box>
         )
     }
@@ -196,10 +204,10 @@ export default class MediaControlCard extends React.Component {
         `;
 
         const description = `
-            You'll call the "buyToken" function,
-            which "safeTransferFrom"s one token to you
-            and distributes your bid price to all addresses specified
-            in the token's royalty array
+            You'll call the "createRoyalty" function,
+            which creates a "Royalty" object and
+            pushes it to the token's Royalty array.
+            "buyToken" automatically considers the Royalty array.
         `
 
         return (
@@ -236,11 +244,9 @@ export default class MediaControlCard extends React.Component {
                         }
 
                         const from = account;
-                        console.log(seller);
-                        
-                        contract.methods.buyToken(
-                            seller, token.tokenType
-                        ).send({ from, value: bid * 100 });
+                        contract.methods.createRoyalty(
+                            seller, id, bid
+                        ).send({ from });
                     }}
                 />
             </Box>
@@ -252,7 +258,7 @@ export default class MediaControlCard extends React.Component {
         const {
             id, token, balance,
             image, name, data,
-            bid, seller
+            bid, seller, royaltys,
         } = this.state;
 
         if (token === null) {
@@ -288,9 +294,11 @@ export default class MediaControlCard extends React.Component {
                         <Typography component="div" variant="h5">
                             {token.name}
                         </Typography>
+
                         <Typography variant="subtitle1" color="text.secondary" component="div">
                             {token.data}
                         </Typography>
+
                         <Typography variant="subtitle1" color="text.secondary" component="div">
                             You have {balance}
                         </Typography>
