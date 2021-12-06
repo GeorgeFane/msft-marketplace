@@ -13,6 +13,7 @@ import { CardActions, Button, TextField, Divider, AlertTitle } from '@mui/materi
 
 import BasicTabs from './BasicTabs';
 import AlertDialog from './AlertDialog';
+import SwitchLabel from './SwitchLabel';
 
 const zeroAddress = '0x42B221DFf0A38c56409032bD2b1D3E6f7cAEdb4B';
 
@@ -30,6 +31,7 @@ export default class MediaControlCard extends React.Component {
             bid: 0,
             seller: '',
             royaltys: null,
+            checked: false,
         };
     }
 
@@ -129,7 +131,38 @@ export default class MediaControlCard extends React.Component {
             id, token, balance,
             image, name, data,
             bid, seller, sellerBalance, royaltys,
+            checked,
         } = this.state;
+
+        const setChecked = checked => this.setState({ checked });
+
+        const buyToken = async () => {
+            if (seller === '') {
+                return;
+            }
+            
+            // seller transfers token to you
+            await contract.methods.safeTransferFrom(
+                seller, account, id, 1, '0x0'
+            ).send({ from: seller });
+
+            // you pay seller and handle royaltys
+            await contract.methods.buyToken(
+                id, seller
+            ).send({ from: account, value: bid * 100 });
+        }
+
+        const buyFraction = () => {
+            if (seller === '') {
+                return;
+            }
+
+            contract.methods.changeRoyalty(
+                id, seller
+            ).send({ from: account, value: bid });
+        }
+
+        const action = checked ? buyFraction : buyToken;
 
         const title = `
             Buy one "${token.name}" from "${seller}" for ${bid * 100} wei?
@@ -167,25 +200,17 @@ export default class MediaControlCard extends React.Component {
                 />
                 
                 <br /><br />
+
+                <SwitchLabel
+                    setChecked={setChecked}
+                />
+                
+                <br /><br />
                 
                 <AlertDialog
                     title={title}
                     description={description}
-                    action={() => {
-                        if (seller === '') {
-                            return;
-                        }
-
-                        // you pay seller and handle royaltys
-                        contract.methods.buyToken(
-                            seller, token.tokenType
-                        ).send({ from: account, value: bid * 100 });
-                        
-                        // seller transfers token to you
-                        contract.methods.safeTransferFrom(
-                            seller, account, id, 1, '0x0'
-                        ).send({ from: seller });
-                    }}
+                    action={action}
                 />
                         
     `           <Typography variant="subtitle1" component="div">
