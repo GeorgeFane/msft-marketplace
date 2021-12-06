@@ -257,6 +257,73 @@ export default class MediaControlCard extends React.Component {
         )
     }
 
+    Fractionalise() {
+        const { contract, account } = this.props;
+        const {
+            id, token, balance,
+            image, name, data,
+            bid, seller, sellerBalance,
+        } = this.state;
+
+        const title = `
+            Create "${seller}" fractions of this token,
+            each recieving ${bid}% of every subsequent sale?
+        `;
+
+        const description = `
+            You'll call the "createRoyalty" function "${seller}" times,
+            each with your address and ${bid}%.
+            You must be the token creator.
+            Fractions can be bought in the "Buy" tab.
+        `
+
+        return (
+            <Box>
+                <TextField
+                    label='# Fractions'
+                    type='number'
+                    value={seller}
+                    onChange={event => {
+                        const seller = event.target.value;
+                        this.setState({ seller });
+                    }}
+                />
+                
+                <br /><br />
+
+                <TextField
+                    label='Percentage'
+                    type='number'
+                    value={bid}
+                    onChange={event => {
+                        const bid = event.target.value;
+                        this.setState({ bid });
+                    }}
+                />
+                
+                <br /><br />
+                
+                <AlertDialog
+                    title={title}
+                    description={description}
+                    action={async () => {
+                        if (seller === '') {
+                            return;
+                        }
+
+                        const promises = seller * [
+                            contract.methods.createRoyalty(
+                                id, account, bid
+                            ).send({ from: account })
+                        ];
+
+                        await Promise.all(promises);
+                    }}
+                />
+            </Box>
+        )
+    }
+
     render() {
         const { contract, account } = this.props;
         const {
@@ -273,6 +340,7 @@ export default class MediaControlCard extends React.Component {
             Customise: this.Customise(),
             Buy: this.Buy(),
             Royalty: this.Royalty(),
+            Fractionalise: this.Fractionalise(),
         }
 
         return (

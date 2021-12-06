@@ -1,12 +1,13 @@
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { Paper, Badge, CardMedia, Card, Typography, TextField } from '@mui/material';
+import { Paper, Badge, CardMedia, Card, Typography, TextField, MenuItem } from '@mui/material';
 
 import { ArrowForward } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 
 import AlertDialog from '../item/AlertDialog';
+import BasicSelect from './BasicSelect';
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -18,8 +19,8 @@ const Item = styled(Paper)(({ theme }) => ({
 const trades = [
     [
         [
-            [0, 5],
-            [1, 20],
+            [0, 25],
+            [1, 5],
         ],
         [
             [2, 1]
@@ -36,8 +37,13 @@ const trades = [
     ],
 ]
 
-export default function BasicButtons({ getToken, tokens }) {
+function transpose(array) {
+    return array[0].map((_, colIndex) => array.map(row => row[colIndex]));
+}
+
+export default function BasicButtons({ getToken, tokens, contract, account }) {
     const [trader, setTrader] = React.useState();
+    const [index, setIndex] = React.useState(0);
     console.log(tokens);
 
     function plus(side) {
@@ -91,16 +97,28 @@ export default function BasicButtons({ getToken, tokens }) {
         They'll call "safeBatchTransferFrom" to give their stuff to you.
     `;
 
-    const action = () => {
+    const action = async () => {
+        const trade = trades[index];
+        let [ids, amounts] = transpose(trade[0]);
+        await contract.methods.safeBatchTransferFrom(
+            account, trader, ids, amounts, '0x0'
+        ).send({ from: account });
+
+        [ids, amounts] = transpose(trade[1]);
+        await contract.methods.safeBatchTransferFrom(
+            trader, account, ids, amounts, '0x0'
+        ).send({ from: trader });
 
     };
 
-    const papers = trades.map(trade => (
-        <Item>
+    const papers = trades.map( (trade, index) => (
+        <MenuItem
+            value={index}
+        >
             {plus(trade[0])}
             <ArrowForward fontSize="large" />
             {plus(trade[1])}
-        </Item>
+        </MenuItem>
     ));
 
     return (
@@ -122,8 +140,13 @@ export default function BasicButtons({ getToken, tokens }) {
                 style={{ width: 222 }}
                 onChange={event => {
                     const trader = event.target.value;
-                    this.setState({ trader });
+                    setTrader(trader);
                 }}
+            />
+
+            <BasicSelect
+                papers={papers}
+                setIndex={setIndex}
             />
             
             <AlertDialog
@@ -131,8 +154,6 @@ export default function BasicButtons({ getToken, tokens }) {
                 description={description}
                 action={action}
             />
-
-            {papers}
         </Stack>
     );
 }

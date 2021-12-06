@@ -112,12 +112,14 @@ export default class App extends React.Component {
                 getBalance={getBalance}
                 getRoyaltys={getRoyaltys}
                 account={account}
-                contract={contract}                
+                contract={contract}
             />,
             Trades: <Trades
                 getToken={getToken}
                 backpack={backpack}
                 tokens={tokens}
+                account={account}
+                contract={contract}
             />,
         }
 
