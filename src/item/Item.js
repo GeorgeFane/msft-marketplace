@@ -11,8 +11,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { CardActions, Button, TextField, Divider, AlertTitle } from '@mui/material';
 
-import BasicTabs from './itemActions/BasicTabs';
-import AlertDialog from './itemActions/AlertDialog';
+import BasicTabs from './BasicTabs';
+import AlertDialog from './AlertDialog';
 
 const zeroAddress = '0x42B221DFf0A38c56409032bD2b1D3E6f7cAEdb4B';
 

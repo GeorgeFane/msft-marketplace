@@ -5,14 +5,10 @@ import { useWeb3React } from "@web3-react/core"
 // import * as c from './contract/contract.mjs';
 import Header from './header/Header';
 
-import Trades from './pages/Trades';
-import Login from './pages/Login';
-import Item from './pages/Item';
-import Backpack from './pages/Backpack';
-import Listing from './pages/Listing';
+import Trades from './trades/Trades';
+import Login from './login/Login';
+import Item from './item/Item';
 
-import Connect from './metamask/Connect';
-import Provider from './metamask/Provider';
 import abi from './contract/abi.json';
 
 const contractAddress = '0xe052Df81992Dd4C55d135A6221cAD0a55721A09b';

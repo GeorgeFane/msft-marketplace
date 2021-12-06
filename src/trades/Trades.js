@@ -6,7 +6,7 @@ import { Paper, Badge, CardMedia, Card, Typography, TextField } from '@mui/mater
 import { ArrowForward } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 
-import AlertDialog from './itemActions/AlertDialog';
+import AlertDialog from '../item/AlertDialog';
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -100,11 +100,6 @@ export default function BasicButtons({ getToken, tokens }) {
             {plus(trade[0])}
             <ArrowForward fontSize="large" />
             {plus(trade[1])}
-            <AlertDialog
-                title={title}
-                description={description}
-                action={action}
-            />
         </Item>
     ));
 
@@ -129,6 +124,12 @@ export default function BasicButtons({ getToken, tokens }) {
                     const trader = event.target.value;
                     this.setState({ trader });
                 }}
+            />
+            
+            <AlertDialog
+                title={title}
+                description={description}
+                action={action}
             />
 
             {papers}

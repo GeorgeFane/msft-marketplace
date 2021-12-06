@@ -5,8 +5,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { TextField, Button } from '@mui/material';
 
-import BasicSelect from './BasicSelect.js';
-import Provider from '../metamask/Provider.js';
+import Provider from './Provider.js';
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
